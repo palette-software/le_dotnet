@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{9DC31DE3-79FF-47A8-96B4-6BA18F6BB1CB}</ProjectGuid>
+    <ProjectGuid>{90D6E9FC-7B88-4E1B-B018-8FA742274558}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LogentriesNLog</RootNamespace>
-    <AssemblyName>LogentriesNLog</AssemblyName>
+    <RootNamespace>LogentriesCore</RootNamespace>
+    <AssemblyName>LogentriesCore</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,12 +30,16 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NLog, Version=3.2.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.3.2.1\lib\net40\NLog.dll</HintPath>
+    <Reference Include="Microsoft.WindowsAzure.Configuration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.3.1.0\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -44,24 +48,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LogentriesTarget.cs" />
+    <Compile Include="AsyncLogger.cs" />
+    <Compile Include="LeClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="palette.logentries.core.nuspec" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\LogentriesCore\LogentriesCore.csproj">
-      <Project>{90D6E9FC-7B88-4E1B-B018-8FA742274558}</Project>
-      <Name>LogentriesCore</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if $(ConfigurationName) == Release (
-COPY "$(TargetPath)" "%25NUGET_PROJECTS%25$(ProjectName)\2.3.0\lib\net40\" /Y
-nuget pack %25NUGET_PROJECTS%25$(ProjectName)\2.3.0\logentries.nlog.nuspec /o %25NUGET_PROJECTS%25$(ProjectName)\2.3.0\
+    <PostBuildEvent>set PAL_PACK_NAME=Palette.LogEntries.0.0.1
+if $(ConfigurationName) == Release (
+echo "pal packo name: %25PAL_PACK_NAME%25"
+md "%25NUGET_PROJECTS%25\%25PAL_PACK_NAME%25\lib\net40\"
+COPY "$(TargetPath)" "%25NUGET_PROJECTS%25\%25PAL_PACK_NAME%25\lib\net40\" /Y
+COPY "$(ProjectDir)\palette.logentries.core.nuspec" "%25NUGET_PROJECTS%25\%25PAL_PACK_NAME%25\" /Y
+nuget pack "$(ProjectDir)\palette.logentries.core.nuspec" /o %25NUGET_PROJECTS%25\%25PAL_PACK_NAME%25\
 )</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
