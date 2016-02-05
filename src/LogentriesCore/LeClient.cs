@@ -108,7 +108,12 @@ namespace LogentriesCore.Net
 
             if (m_UseSsl)
             {
-                m_SslStream = new SslStream(m_Stream);
+                m_SslStream = new SslStream(m_Stream, false, (sender, certificate, chain, sslPolicyErrors) =>
+                {
+                    // HACK-HACK: Always return true until our LogEntries forwarder is not ready.
+                    return true;
+                }
+                );
                 m_SslStream.AuthenticateAsClient(m_ServerAddr);
 
             }
