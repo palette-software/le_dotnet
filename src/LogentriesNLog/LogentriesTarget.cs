@@ -12,7 +12,9 @@ using LogentriesCore.Net;
 
 namespace NLog.Targets
 {
-    [Target("Logentries")]
+    // The target is renamed to PaletteAlerts, so that nothing will indicate
+    // in our config files that we are using LogEntries.
+    [Target("PaletteAlerts")]
     public sealed class LogentriesTarget : TargetWithLayout
     {
         private AsyncLogger logentriesAsync;

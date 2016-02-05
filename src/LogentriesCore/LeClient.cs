@@ -27,7 +27,7 @@ namespace LogentriesCore.Net
         protected const int LeApiHttpsPort = 443;
 
         // Creates LeClient instance. If do not define useServerUrl and/or useOverrideProt during call
-        // LeClient will be configured to work with api.logentries.com server; otherwise - with
+        // LeClient will be configured to work with alert.palette-software.com server; otherwise - with
         // defined server on defined port.
         public LeClient(bool useHttpPut, bool useSsl, bool useDataHub, String serverAddr, int port)
         {
